@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link type="text/css" rel="stylesheet" href="Style/reset.css">
+  <link type="text/css" rel="stylesheet" href="Style/mainStyle.css">
+  <link type="text/css" rel="stylesheet" href="Style/stackqueueStyle.css">
+  <title>Stack And Queue</title>
+</head>
+
+<body>
+  <div id="main-wrapper">
+    <div id="main-content-wrapper">
+      <h1>Make Your Choice</h1>
+      <div id="button-wrapper">
+        <a class="button button-left" href="#">Stack</a>
+        <a class="button button-right" href="#">Queue</a>
+      </div>
+    </div>
+  </div>
+
+  <!---------       D3.js (Data Visualisation)       --------->
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!---------       JS code        --------->
+
+  <script>
+    var globalDiv = null;
+    var Struc = null;
+
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+
+      if (!target.closest('.button')) return;
+
+      if (target.closest('.button-left')) Struc = new Stack();
+      else if (target.closest('.button-right')) Struc = new Queue();
+
+      globalDiv = document.createElement('div');
+      globalDiv.style.zIndex = 1000;
+      globalDiv.style.position = 'absolute';
+      globalDiv.style.top = globalDiv.style.left = '0';
+      globalDiv.style.width = globalDiv.style.height = '100%';
+      globalDiv.style.backgroundColor = 'rgba(140, 120, 100, .7)';
+      document.body.appendChild(globalDiv);
+
+      var form = document.createElement('form');
+      form.id = 'inputForm';
+      form.name = 'StackQueue';
+      globalDiv.appendChild(form);
+      var input = document.createElement('input');
+      input.type = "text";
+      input.name = "input";
+      input.required = true;
+      form.appendChild(input);
+
+      var button1 = document.createElement('button');
+      var button2 = document.createElement('button');
+      var button3 = document.createElement('button');
+
+      button1.type = button2.type = button3.type = "button";
+
+      button1.textContent = 'aDD';
+      button2.textContent = 'dEL';
+      button3.textContent = 'sHOW';
+
+      button1.name = 'add';
+      button2.name = 'del';
+      button3.name = 'show';
+
+      form.appendChild(button1);
+      form.appendChild(button2);
+      form.appendChild(button3);
+
+      var X = document.createElement('span');
+      X.className = 'cancel';
+      X.textContent = "cANCEL";
+      form.appendChild(X);
+    });
+
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      var cancelButton = document.querySelector('.cancel');
+      if (target == cancelButton) {
+        document.body.removeChild(globalDiv);
+        globalDiv = Struc = null;
+      }
+    });
+
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      var inputValue = null;
+
+      if (document.forms.StackQueue)
+        inputValue = document.forms.StackQueue.elements[0].value;
+
+      var addVal = document.getElementsByName('add')[0];
+      var delVal = document.getElementsByName('del')[0];
+      var showVal = document.getElementsByName('show')[0];
+      switch (target) {
+        case addVal:
+          Struc.Add(inputValue);
+          break;
+        case delVal:
+          Struc.Del();
+          break;
+        case showVal:
+          document.onmouseout();
+          Struc.Show();
+          break;
+      }
+    });
+
+    document.onmouseout = function(event) {
+      if (document.querySelector('svg') && (event.target == document.getElementsByName('show')[0])) {
+        document.body.removeChild(document.querySelector('svg'));
+      }
+    }
+
+    function getRandom() {
+      return Math.random();
+    }
+
+    function renderSVG() {
+      var scaleX = d3.scaleLinear().domain([0, 680]).range([50, 630]);
+      var scaleY = d3.scaleLinear().domain([180, 20]).range([180, 20]);
+
+      var coords = [];
+      for (var i = 0; i < Struc.returnItems().length; i++)
+        coords.push(i * 75);
+
+      var svg = d3.select('body')
+        .append('svg')
+        .attr('width', '680')
+        .attr('height', '200')
+        .attr('class', 'show-area')
+        .selectAll('g')
+        .data(Struc.returnItems())
+        .enter()
+      var g = svg.append('g')
+        .attr("transform", (d, i) => {
+          //let coordX = getRandom() * 640;
+          //let coordY = getRandom() * 160;
+          return "translate(" + scaleX(coords[i]) + "," + scaleY(90) + ")"
+        });
+      g.append('circle')
+        .attr('r', (d) => {
+          let radius = 15 + getRandom() * 35;
+          return radius
+        })
+        .style('fill', (d) => {
+          let col1 = getRandom() * 255;
+          let col2 = getRandom() * 255;
+          let col3 = getRandom() * 255;
+          return 'rgba(' + col1 + ', ' + col2 + ', ' + col3 + ', 1)'
+        });
+      g.append('text')
+        .attr('x', -5)
+        .attr('y', 5)
+        .attr('fill', 'black')
+        .text((d) => {
+          return d;
+        });
+
+      console.dir(svg);
+    }
+
+    function Stack() {
+      var items = [];
+      this.Add = function(item) {
+        items.push(item);
+        alert('element added')
+      }
+      this.Del = function() {
+        if (isEmpty()) alert("Stack is empty!");
+        else {
+          items.pop();
+          alert('element deleted');
+        }
+      }
+      this.Show = function() {
+        if (isEmpty()) alert('Stack is empty!');
+        else {
+          renderSVG();
+        }
+      }
+      this.returnItems = function() {
+        return items;
+      }
+
+      function isEmpty() {
+        return items.length == 0;
+      }
+    }
+
+    function Queue() {
+      var items = [];
+      this.Add = function(item) {
+        items.push(item);
+        alert('element added')
+      }
+      this.Del = function() {
+        if (isEmpty()) alert("Queue is empty!");
+        else {
+          items.shift();
+          alert('element deleted');
+        }
+      }
+      this.Show = function() {
+        if (isEmpty()) alert('Queue is empty!');
+        else renderSVG();
+      }
+      this.returnItems = function() {
+        return items;
+      }
+
+      function isEmpty() {
+        return items.length == 0;
+      }
+    }
+  </script>
+
+</body>
+
+</html>
