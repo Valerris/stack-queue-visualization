@@ -1,0 +1,108 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+    min-width: 280px;
+    background-color: white;
+    background-image: url(../Img/Donuts_background.jpg);
+    font-family: monospace;
+    font-size: 18px;
+    color: black;
+    line-height: 24px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+#main-wrapper {
+    height: 100%;
+    background-color: rgba(140, 120, 100, .4);
+}
+
+#main-content-wrapper {
+    min-width: 320px;
+    width: 50%;
+    margin: auto;
+    margin-top: 200px;
+    padding: 30px;
+    border: 4px solid black;
+    border-radius: 7px;
+    background-color: #FFBFD9; /* previous color: #FFADCE */
+    box-sizing: border-box;
+    box-shadow: 0 3px #CC99B0, 0 7px rgba(0, 0, 0, .5), 9px 12px 5px 1px rgba(127, 127, 127, .5);
+    opacity: .9;
+}
+
+h1 {
+    font-size: 3em;
+    line-height: 1em;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 3px 5px 3px white, -2px -2px white;    
+}
+
+h1:hover {
+    animation-name: scale;
+    animation-duration: .6s;
+    animation-timing-function: ease-in;
+}
+
+@keyframes scale {
+    50% {
+        transform: scale(1.5);
+    }
+    90% {
+        transform: skewX(-35deg);
+    }
+    95% {
+        transform: skewX(35deg);
+    }
+}
+
+#button-wrapper {
+    font-family: "Times New Roman", serif;
+    width: 50%;
+    height: 40px;
+    margin: auto;
+    margin-top: 50px;
+    position: relative;
+}
+
+.button {
+    text-shadow: 1px 0;
+    letter-spacing: 3px;
+    background-color: white;
+    font-weight: 600;
+    border: 3px solid black;
+    padding: 5px 30px;
+}
+
+.button:hover {
+    box-shadow: 10px 10px black, -5px -5px white;
+}
+
+.button-left:active {
+    left: 10px;
+    top: 10px;
+    box-shadow: none;
+}
+
+.button-right:active {
+    right: -10px;
+    top: 10px;
+    box-shadow: none;
+}
+
+.button-left,
+.button-right {
+    position: absolute;
+}
+
+.button-left {
+    left: 0;
+}
+.button-right {
+    right: 0;
+}
